@@ -52,6 +52,5 @@ int main()
 {
     int nums[] = {}, retSize = 0;
 
-    searchRange(nums, 0, 0, &retSize);
     return 0;
 }
