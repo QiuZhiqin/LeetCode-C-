@@ -21,7 +21,7 @@
 			],
 			"group": {
 				"kind": "build",
-				"isDefault": true
+				"isDefault": false
 			},
 			"detail": "compiler: C:/MinGW/bin/g++.exe"
 		},
@@ -44,6 +44,68 @@
             ],
             "group": "build",
             "detail": "compiler: C:/MinGW/bin/gcc.exe"
+		},
+		{
+			"type": "cppbuild",
+			"label": "CMake Configure",
+			"command": "cmake",
+			"args": [
+				"-S", "${workspaceFolder}",         // 源码目录
+				"-B", "${workspaceFolder}/build"    // 编译目录
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"         // 工作目录
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+		},
+		{
+			"type": "cppbuild",
+			"label": "CMake Build",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"Build",
+				"--config Debug"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"dependsOn":[
+				"CMake Configure"
+			]
+		},
+		{
+			"type": "shell",
+			"label": "Copy Excutable",
+			"command": "mv build/*.exe ./",
+		},
+		{
+			"label": "Delete Build Forlder",
+			"command": "rm -rf ${workspaceFolder}/build/",
+			"dependsOn":[
+				"Copy Excutable"
+			]
+		},
+		{
+			"label": "Build",
+			"dependsOrder": "sequence",
+			"dependsOn":[
+				"CMake Build",
+				"Copy Excutable"
+			]
 		}
 	]
 }

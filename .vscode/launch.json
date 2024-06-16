@@ -9,7 +9,7 @@
       "stopAtEntry": false,
       "externalConsole": false,
       "cwd": "d:/C",
-      "program": "${workspaceFolder}\\build\\Debug\\${fileBasenameNoExtension}.exe",
+      "program": "${workspaceFolder}\\test.exe",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
@@ -19,7 +19,7 @@
           "ignoreFailures": true
         }
       ],
-      "preLaunchTask": "C/C++: gcc.exe build active file",
+      "preLaunchTask": "Build"
     }
   ]
 }

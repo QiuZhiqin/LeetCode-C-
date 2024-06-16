@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
-
+#include "alg_sort.h"
 
  typedef struct TreeNode {
      int val;
@@ -50,7 +50,9 @@ struct TreeNode* deduceTree(int* preorder, int preorderSize, int* inorder, int i
 
 int main()
 {
-    int nums[] = {}, retSize = 0;
+    int nums[] = {5, 3, 2, 8, 9, 3, 4, 22, 12, 99, 23, 6};
+
+    alg_merge_sort(nums, 0, 11);
 
     return 0;
 }

@@ -56,5 +56,10 @@
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
   "C_Cpp_Runner.msvcSecureNoWarnings": false,
-  "code-runner.runInTerminal": true
+  "code-runner.runInTerminal": true,
+  "files.associations": {
+    "cstdlib": "c",
+    "alg_sort.h": "c",
+    "stdio.h": "c"
+  }
 }

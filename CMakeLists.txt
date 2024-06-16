@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.10)
 #项目名称
 project(test)
 
+#指定头文件路径
+include_directories(${PROJECT_SOURCE_DIR}/src/)
+
 #指定源文件，仅有此处包含的文件会参与编译
 file(GLOB SRC_FILES
 "${PROJECT_SOURCE_DIR}/src/*.c"
