@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
+#include"common.h"
 
 void alg_merge_sort(int *data, int start, int end)
 {
@@ -55,4 +56,110 @@ void alg_merge_sort(int *data, int start, int end)
     free(help);
 
     return;
+}
+
+int alg_partition(int *data, int start, int end)
+{
+    int left, right, pivot;
+
+    left = start;
+    right = end - 1;
+    pivot = data[end]; // 选择当前数组最后一个元素作支点
+
+    while (left <= right) {
+        if (data[left] <= pivot) {
+            left++;
+        } else {
+            swap(&data[left], &data[right]);
+            right--;
+        }
+    }
+
+    swap(&data[left], &data[end]);
+
+    return left;
+}
+
+void alg_quick_sort(int *data, int start, int end)
+{
+    int pos;
+
+    if (data == NULL || start < 0 || end < 0) {
+        printf("alg_quick_sort: invalid input");
+        return;
+    }
+
+    if (start >= end) {
+        return;
+    }
+
+    pos = alg_partition(data, start, end);
+
+    alg_quick_sort(data, start, pos - 1);
+    alg_quick_sort(data, pos + 1, end);
+}
+
+/*
+O(logN)
+大根堆的调整，通常在大根堆删除元素时使用，把放到start位置的新元素下沉到属于它的位置，让大根堆依然成立
+*/
+static void alg_heap_adjust(int *data, int start, int heap_butt)
+{
+    if (data == NULL || start < 0 || heap_butt < 0) {
+        printf("alg_heap_adjust: invalid input");
+        return;
+    }
+
+    if (start > heap_butt) {
+        return;
+    }
+
+    for (int i = 2 * start + 1; i <= heap_butt; i = 2 * i + 1) {
+        /* find the bigger child */
+        if (i + 1 <= heap_butt && data[i] < data[i + 1]) {
+            i++;
+        }
+
+        if (data[start] < data[i]) {
+            swap(&data[start], &data[i]);
+            start = i;
+        } else {
+            break;
+        }
+    }
+}
+
+/*
+O(logN)
+往大根堆里插入新元素，使新元素上浮到属于它的位置，让大根堆依然成立（使用前先把待插入值放到data[idx]）
+*/
+static void alg_heap_insert(int *data, int idx)
+{
+    int father_idx;
+    if (data == NULL || idx < 0) {
+        printf("alg_heap_insert: invalid input");
+    }
+
+    father_idx = (idx - 1) / 2;
+    while (father_idx >= 0 && data[father_idx] < data[idx]) {
+        swap(&data[father_idx], &data[idx]);
+        idx = father_idx;
+        father_idx = (idx - 1) / 2;
+    }
+}
+
+void alg_heap_sort(int *data, int size)
+{
+    if (data == NULL || size < 0) {
+        printf("alg_heap_sort: invalid input");
+    }
+
+    for (int i = 0; i < size; ++i) {
+        alg_heap_insert(data, i);
+    }
+
+    for (int heap_butt = size - 1; heap_butt > 0; ) {
+        swap(&data[0], &data[heap_butt--]);
+        alg_heap_adjust(data, 0, heap_butt);
+    }
 }

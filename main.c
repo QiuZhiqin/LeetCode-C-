@@ -50,9 +50,9 @@ struct TreeNode* deduceTree(int* preorder, int preorderSize, int* inorder, int i
 
 int main()
 {
-    int nums[] = {5, 3, 2, 8, 9, 3, 4, 22, 12, 99, 23, 6};
+    int nums[] = {5, 2, 3, 1, 3, 4, 5, 0};
 
-    alg_merge_sort(nums, 0, 11);
+    alg_heap_sort(nums, 8);
 
     return 0;
 }
