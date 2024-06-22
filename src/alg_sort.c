@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
+#include<string.h>
 #include"common.h"
 
 void alg_merge_sort(int *data, int start, int end)
@@ -162,4 +163,53 @@ void alg_heap_sort(int *data, int size)
         swap(&data[0], &data[heap_butt--]);
         alg_heap_adjust(data, 0, heap_butt);
     }
+}
+
+/* 仅可比较正整数 */
+void alg_radix_sort(unsigned int *data, unsigned int arry_size)
+{
+    unsigned int maxbits = 0;
+    unsigned int *bucket = NULL;
+    int count[10] = { 0 };
+
+    if (data == NULL || arry_size == 0) {
+        return;
+    }
+
+    bucket = (unsigned int *)malloc(sizeof(unsigned int) * arry_size);
+    if (bucket == NULL) {
+        printf("malloc failed\n");
+        return;
+    }
+
+    memset(bucket, 0, sizeof(unsigned int) * arry_size);
+    maxbits = get_maxbits(data, arry_size);
+    for (int i = 0; i < maxbits; ++i) {
+        for (int j = 0; j < arry_size; ++j) {
+            count[get_digit(data[j], i)]++; // 计算每个基数出现的次数
+        }
+
+        for (int j = 1; j < 10; ++j) {
+            count[j] = count[j - 1] + count[j]; //计算基数小于等于自己的数的个数
+        }
+
+        /* 
+        根据count数组找到自己的位置 此处从右向左遍历是为了保持相对顺序,例：data = {12, 11, 13, 15}
+        经过第一次入桶出桶,得到的顺序是11 12 13 15。第二次入桶,得到count[1] == 4, 这时如果从左边开始遍历，出桶得到的结果就是15 13 12 11，显然与预期不符
+        */
+        for (int j = arry_size - 1; j >= 0; --j) {
+            int digit = get_digit(data[j], i);
+            bucket[count[digit] - 1] = data[j];
+            count[digit]--;
+        }
+
+        for (int j = 0; j < arry_size; ++j) {
+            data[j] = bucket[j];
+        }
+
+        /* 完成一次入桶出桶，count数组清空 */
+        memset(count, 0, sizeof(unsigned int) * 10);
+    }
+
+    free(bucket);
 }
