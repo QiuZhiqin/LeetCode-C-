@@ -3,7 +3,8 @@
 #include<stdbool.h>
 #include"alg_binary_tree.h"
 
-struct TreeNode* deduceTree(int* preorder, int preorderSize, int* inorder, int inorderSize) {
+struct TreeNode* deduceTree(int* preorder, int preorderSize, int* inorder, int inorderSize)
+{
     int i;
     TreeNode *ret = NULL;
 

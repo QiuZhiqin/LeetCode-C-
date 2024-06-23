@@ -7,4 +7,5 @@ typedef struct TreeNode {
     struct TreeNode *right;
 } TreeNode;
 
+struct TreeNode* deduceTree(int* preorder, int preorderSize, int* inorder, int inorderSize);
 #endif
