@@ -21,6 +21,65 @@ int int_compare_big_first(void *a, void *b)
     return *int_b - *int_a;
 }
 
+void alg_bubble_sort(int *data, int size, compare_func cmp)
+{
+    bool flag;
+
+    if (data == NULL || size == 0) {
+        printf("alg_bubble_sort: invalid input");
+        return;
+    }
+
+    if (cmp == NULL) {
+        cmp = int_compare_small_first;
+    }
+
+    for (int i = 0; i < size; ++i) {
+        flag = false;
+        /* 从右边往左冒泡，每次找出一个最大/最小的数放在左边 */
+        for (int j = size - 1; j > i; --j) {
+            if (cmp(&data[j - 1], &data[j]) > 0) {
+                swap(&data[j - 1], &data[j]);
+                flag = true;
+            }
+        }
+
+        /* 一次冒泡没有交换，认为数组已经有序 */
+        if (flag == false) {
+            return;
+        }
+    }
+}
+
+void alg_insert_sort(int *data, int size, compare_func cmp)
+{
+    int cur;
+
+    if (data == NULL || size == 0) {
+        printf("alg_insert_sort: invalid input");
+        return;
+    }
+
+    if (cmp == NULL) {
+        cmp = int_compare_small_first;
+    }
+
+    for (int i = 1; i < size; ++i) { // 从第二个数开始插入，因为仅有一个数的数组一定有序
+        cur = data[i];
+        int j;
+        /* 从右往左遍历有序数组，找到cur应当插入的位置 */
+        for (j = i - 1; j >= 0; --j) {
+            if (cmp(&cur, &data[j]) >= 0) {
+                break;
+            }
+
+            data[j + 1] = data[j];
+        }
+
+        data[j + 1] = cur;
+    }
+}
+
 void alg_merge_sort(int *data, int start, int end, compare_func cmp)
 {
     int mid, p1, p2, idx = 0;
@@ -35,6 +94,10 @@ void alg_merge_sort(int *data, int start, int end, compare_func cmp)
     // 递归结束条件
     if (start == end) {
         return;
+    }
+
+    if (cmp == NULL) {
+        cmp = int_compare_small_first;
     }
 
     // 计算中间点
@@ -111,6 +174,10 @@ void alg_quick_sort(int *data, int start, int end, compare_func cmp)
         return;
     }
 
+    if (cmp == NULL) {
+        cmp = int_compare_small_first;
+    }
+
     pos = alg_partition(data, start, end, cmp);
 
     alg_quick_sort(data, start, pos - 1, cmp);
@@ -121,7 +188,7 @@ void alg_quick_sort(int *data, int start, int end, compare_func cmp)
 O(logN)
 大根堆的调整，通常在大根堆删除元素时使用，把放到start位置的新元素下沉到属于它的位置，让大根堆依然成立
 */
-static void alg_heap_adjust(int *data, int start, int heap_butt, compare_func cmp)
+void alg_heap_adjust(int *data, int start, int heap_butt, compare_func cmp)
 {
     if (data == NULL || start < 0 || heap_butt < 0) {
         printf("alg_heap_adjust: invalid input");
@@ -130,6 +197,10 @@ static void alg_heap_adjust(int *data, int start, int heap_butt, compare_func cm
 
     if (start > heap_butt) {
         return;
+    }
+
+    if (cmp == NULL) {
+        cmp = int_compare_big_first; // 默认大根堆
     }
 
     for (int i = 2 * start + 1; i <= heap_butt; i = 2 * i + 1) {
@@ -151,11 +222,15 @@ static void alg_heap_adjust(int *data, int start, int heap_butt, compare_func cm
 O(logN)
 往大根堆里插入新元素，使新元素上浮到属于它的位置，让大根堆依然成立（使用前先把待插入值放到data[idx]）
 */
-static void alg_heap_insert(int *data, int idx, compare_func cmp)
+void alg_heap_insert(int *data, int idx, compare_func cmp)
 {
     int father_idx;
     if (data == NULL || idx < 0) {
         printf("alg_heap_insert: invalid input");
+    }
+
+    if (cmp == NULL) {
+        cmp = int_compare_big_first; // 默认大根堆
     }
 
     father_idx = (idx - 1) / 2;
