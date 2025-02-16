@@ -2,9 +2,10 @@
 #include "myhash.h"
 #include "alg_sort.h"
 
+/* solution for leetcode problem: https://leetcode.cn/problems/longest-consecutive-sequence/description/ */
 hash_table_stru *hash_table = NULL;
 
-int longest_consecutive(int* nums, int numsSize) {
+int longestConsecutive(int* nums, int numsSize) {
     int longest_consecutive = 0;
     int cur_num, cur_len;
 
@@ -31,4 +32,32 @@ int longest_consecutive(int* nums, int numsSize) {
     }
 
     return longest_consecutive;
+}
+
+/* solution for solution for leetcode problem: https://leetcode.cn/problems/container-with-most-water/description/ */
+int maxArea(int* height, int heightSize) {
+    int left = 0, right = heightSize - 1;
+    int max_area = 0;
+
+    while (left < right) {
+        int area = (right - left) * (height[left] < height[right] ? height[left] : height[right]);
+        if (area > max_area) {
+            max_area = area;
+        }
+
+        /* If left height is smaller than right height, move left pointer. Proof of this concusion is as follows:
+         * Let's say the left height is x, and the right height is y, and x < y, t = right - left.
+         * area = min(x, y) * t = x * t. If we move the right pointer, the new area will be min(x, y1) * (t - 1).
+         * If y1 > y, then min(x, y1) * (t - 1) = x * (t - 1) < x * t.
+         * If y1 < y, then min(x, y1) * (t - 1) <= min(x, y) * (t - 1) < x * t.
+         * So, the new area will always be smaller than the old area if we move the right pointer, so we should move the left pointer.
+         */
+        if (height[left] <= height[right]) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+
+    return max_area;
 }
