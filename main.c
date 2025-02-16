@@ -1,13 +1,19 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<stdbool.h>
-#include"alg_sort.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include "alg_sort.h"
+#include "myhash.h"
 
-int main()
+extern int longest_consecutive(int* nums, int numsSize);
+
+int main(void)
 {
-    int nums[] = {11, 11, 11, 14};
+    int nums[] = {1, 0, 1, 2};
+    int result = 0;
 
-    alg_insert_sort(nums, 4, int_compare_small_first);
+    result = longest_consecutive(nums, sizeof(nums) / sizeof(int));
+    printf("longest_consecutive: %d\n", result);
+    printf("done\n");
 
     return 0;
 }

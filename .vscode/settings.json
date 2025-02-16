@@ -60,6 +60,7 @@
   "files.associations": {
     "cstdlib": "c",
     "alg_sort.h": "c",
-    "stdio.h": "c"
+    "stdio.h": "c",
+    "myhash.h": "c"
   }
 }

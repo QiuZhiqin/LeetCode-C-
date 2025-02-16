@@ -2,9 +2,9 @@
 #define __ALG_SORT_H
 
 /* 返回负数时，a排前面，返回正数时，b排前面 */
-typedef int (*compare_func)(void *a, void *b);
-int int_compare_small_first(void *a, void *b);
-int int_compare_big_first(void *a, void *b);
+typedef int (*compare_func)(const void *a, const void *b);
+int int_compare_small_first(const void *a, const void *b);
+int int_compare_big_first(const void *a, const void *b);
 
 /**
  * 不具备稳定性的排序：选择排序、快速排序、堆排序

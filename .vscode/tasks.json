@@ -90,14 +90,7 @@
 		{
 			"type": "shell",
 			"label": "Copy Excutable",
-			"command": "mv build/*.exe ./",
-		},
-		{
-			"label": "Delete Build Forlder",
-			"command": "rm -rf ${workspaceFolder}/build/",
-			"dependsOn":[
-				"Copy Excutable"
-			]
+			"command": "mv build/Debug/*.exe ./",
 		},
 		{
 			"label": "Build",

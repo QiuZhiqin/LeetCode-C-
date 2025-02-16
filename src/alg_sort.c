@@ -5,7 +5,7 @@
 #include"common.h"
 #include"alg_sort.h"
 
-int int_compare_small_first(void *a, void *b)
+int int_compare_small_first(const void *a, const void *b)
 {
     int *int_a = (int *)a;
     int *int_b = (int *)b;
@@ -13,7 +13,7 @@ int int_compare_small_first(void *a, void *b)
     return *int_a - *int_b;
 }
 
-int int_compare_big_first(void *a, void *b)
+int int_compare_big_first(const void *a, const void *b)
 {
     int *int_a = (int *)a;
     int *int_b = (int *)b;
