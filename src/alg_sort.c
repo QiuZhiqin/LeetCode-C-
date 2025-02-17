@@ -7,18 +7,12 @@
 
 int int_compare_small_first(const void *a, const void *b)
 {
-    int *int_a = (int *)a;
-    int *int_b = (int *)b;
-
-    return *int_a - *int_b;
+    return *(int*)a - *(int*)b;
 }
 
 int int_compare_big_first(const void *a, const void *b)
 {
-    int *int_a = (int *)a;
-    int *int_b = (int *)b;
-
-    return *int_b - *int_a;
+    return *(int*)b - *(int*)a;
 }
 
 void alg_bubble_sort(int *data, int size, compare_func cmp)

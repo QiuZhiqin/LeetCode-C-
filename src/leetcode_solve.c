@@ -2,7 +2,7 @@
 #include "myhash.h"
 #include "alg_sort.h"
 
-/* solution for leetcode problem: https://leetcode.cn/problems/longest-consecutive-sequence/description/ */
+/* solution leetcode problem: https://leetcode.cn/problems/longest-consecutive-sequence/description/ */
 hash_table_stru *hash_table = NULL;
 
 int longestConsecutive(int* nums, int numsSize) {
@@ -34,7 +34,7 @@ int longestConsecutive(int* nums, int numsSize) {
     return longest_consecutive;
 }
 
-/* solution for solution for leetcode problem: https://leetcode.cn/problems/container-with-most-water/description/ */
+/* solution leetcode problem: https://leetcode.cn/problems/container-with-most-water/description/ */
 int maxArea(int* height, int heightSize) {
     int left = 0, right = heightSize - 1;
     int max_area = 0;
@@ -60,4 +60,70 @@ int maxArea(int* height, int heightSize) {
     }
 
     return max_area;
+}
+
+/* solution leetcode problem: https://leetcode.cn/problems/3sum/description/ */
+int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes) {
+    int** ret_array = NULL;
+    int i, j, k, tmp;
+
+    /* Why choose size numsSize * numsSize? 
+     * The numbers of combination is C(numSize, 2) instead of C(numSize, 3), beacuse when we determine the number one and two, the number three is also determined.
+     * So the maximum size of the return array is (numsSize * (numsSize - 1)) / 2 < numsSize * numsSize.
+     */
+    ret_array = (int**)malloc(sizeof(int*) * numsSize * numsSize);
+    if (ret_array == NULL) {
+        printf("threeSum: malloc failed\n");
+        return NULL;
+    }
+
+    *returnColumnSizes = (int*)malloc(sizeof(int) * numsSize * numsSize);
+    *returnSize = 0;
+
+    qsort(nums, numsSize, sizeof(int), int_compare_small_first);
+    for ( i = 0; i < numsSize - 2; i++) {
+        j = i + 1;
+        k = numsSize - 1;
+        tmp = nums[i];
+        /* The cur number eaquals to the last number means the last number is already processed.*/
+        if (i > 0 && tmp == nums[i - 1]) {
+            continue;
+        }
+
+        /* If the sum of the smallest three numbers is bigger than 0, the sum of tmp and other numbers must bigger than 0 too.*/
+        if (tmp + nums[i + 1] + nums[i + 2] > 0) {
+            break;
+        }
+
+        while (j < k && j < numsSize && k > 0) {
+            if (tmp + nums[j] + nums[k] == 0) {
+               ret_array[*returnSize] = (int*)malloc(sizeof(int) * 3);
+               if (ret_array[*returnSize] == NULL) {
+                   printf("threeSum: malloc failed\n");
+                   return NULL;
+               }
+               ret_array[*returnSize][0] = nums[i];
+               ret_array[*returnSize][1] = nums[j];
+               ret_array[*returnSize][2] = nums[k];
+               (*returnColumnSizes)[*returnSize] = 3;
+               (*returnSize)++;
+               j++;
+               k--;
+
+               while (j < k && nums[j] == nums[j - 1]) {
+                   j++;
+               }
+
+               while (j < k && nums[k] == nums[k + 1]) {
+                   k--;
+               }
+           } else if (tmp + nums[j] + nums[k] < 0) {
+               j++;
+           } else {
+               k--;
+           }
+       }
+    }
+
+    return ret_array;
 }
