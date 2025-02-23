@@ -2,7 +2,7 @@
 #include "myhash.h"
 #include "alg_sort.h"
 
-/* solution leetcode problem: https://leetcode.cn/problems/longest-consecutive-sequence/description/ */
+/* Solution for leetcode problem: https://leetcode.cn/problems/longest-consecutive-sequence/description/ */
 hash_table_stru *hash_table = NULL;
 
 int longestConsecutive(int* nums, int numsSize) {
@@ -34,7 +34,7 @@ int longestConsecutive(int* nums, int numsSize) {
     return longest_consecutive;
 }
 
-/* solution leetcode problem: https://leetcode.cn/problems/container-with-most-water/description/ */
+/* Solution for leetcode problem: https://leetcode.cn/problems/container-with-most-water/description/ */
 int maxArea(int* height, int heightSize) {
     int left = 0, right = heightSize - 1;
     int max_area = 0;
@@ -62,7 +62,7 @@ int maxArea(int* height, int heightSize) {
     return max_area;
 }
 
-/* solution leetcode problem: https://leetcode.cn/problems/3sum/description/ */
+/* Solution for leetcode problem: https://leetcode.cn/problems/3sum/description/ */
 int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes) {
     int** ret_array = NULL;
     int i, j, k, tmp;
@@ -126,4 +126,175 @@ int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes
     }
 
     return ret_array;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/trapping-rain-water/description/ */
+
+/* Solution1: My Original Solution
+ * For each height, we find the position where the height is smaller than the current height, i.e., height[pos] < cur_height.
+ * Then we find the left and right bound of the water, i.e., the left and right position where the height is bigger than cur_height.
+ * The volume of current heighr is right - left - 1. Perform this operation for each height, accumulate the volume.
+ * The time complexity is O(n * h). n = heightSize, h = max(height[0], height[1], ..., height[heightSize - 1]).
+ */
+int trap1(int* height, int heightSize) {
+    int left, right, volume = 0;
+
+    if (heightSize < 3) {
+        return 0;
+    }
+
+    for (int cur_height = 1; ; ++cur_height) {
+        for (int i = 1; i < heightSize - 1 ; ++i) {
+            if (height[i] < cur_height) {
+                left =  i - 1;
+                right = i + 1;
+                /* Find the left bound */
+                while (left >= 0 && height[left] < cur_height) {
+                    left--;
+                }
+                /* Find the right bound */
+                while (right < heightSize && height[right] < cur_height) {
+                    right++;
+                }
+
+                if (left >= 0 && right < heightSize) {
+                    volume += right - left - 1;
+                    i = right;
+                /* The left and right bound are not found, meaning the current height is the highest. */
+                } else if (left < 0 && right >= heightSize) {
+                    return volume;
+                } else if (left < 0) { // The left bound is not found, meaning height[right] is the highest.
+                    i = right;
+                } else { // The right bound is not found, meaning height[left] is the highest, break the loop to next height.
+                    break;
+                }
+            }
+        }
+    }
+
+    return volume;
+}
+
+/* Solution2: Solution of a random guy on leetcode
+ * We can find the highest height and its position, then we calculate the volume of the left and right part of the highest height.
+ * The time complexity is O(n), the space complexity is O(1).
+ */
+int trap2(int* height, int heightSize) {
+    int max_height = 0, max_height_pos, volume = 0, water_height = 0;
+
+    for (int i = 0; i < heightSize; ++i) {
+        if (height[i] > max_height) {
+            max_height = height[i];
+            max_height_pos = i;
+        }
+    }
+
+    if (max_height_pos == -1)
+        return 0;
+
+    for (int i=0; i < max_height_pos; i++) {
+        if (height[i] > water_height)
+            water_height = height[i];
+        volume += water_height - height[i];
+    }
+    water_height = 0;
+    for (int i = heightSize - 1; i > max_height_pos; i--) {
+        if (height[i] > water_height)
+            water_height = height[i];
+        volume += water_height - height[i];
+    }
+
+    return volume;
+}
+
+/* Solution3: Dynamic Programming
+ * We use two arrays to store the left and right max height of each position.
+ * The time complexity is O(n), the space complexity is O(n).
+ */
+int trap3(int* height, int heightSize) {
+    int *left_max = NULL, *right_max = NULL;
+    int volume = 0;
+
+    left_max = (int *)malloc(sizeof(int) * heightSize);
+    if (left_max == NULL) {
+        printf("trap: malloc failed\n");
+        return 0;
+    }
+    right_max = (int *)malloc(sizeof(int) * heightSize);
+    if (right_max == NULL) {
+        printf("trap: malloc failed\n");
+        free(left_max);
+        return 0;
+    } 
+    memset(left_max, 0, sizeof(int) * heightSize);
+    memset(right_max, 0, sizeof(int) * heightSize);
+
+
+    /* Initialize left_max array */
+    left_max[0] = height[0];
+    for (int i = 1; i < heightSize; i++) {
+        left_max[i] = (height[i] > left_max[i - 1]) ? height[i] : left_max[i - 1];
+    }
+
+    /* Initialize right_max array */
+    right_max[heightSize - 1] = height[heightSize - 1];
+    for (int i = heightSize - 2; i >= 0; i--) {
+        right_max[i] = (height[i] > right_max[i + 1]) ? height[i] : right_max[i + 1];
+    }
+
+    /* Volume of trapped water in each pos equals to min(left_max[i], right_max[i]) - height[i] */
+    for (int i = 0; i < heightSize; i++) {
+        volume += left_max[i] < right_max[i] ? left_max[i] - height[i] : right_max[i] - height[i];
+    }
+
+    return volume;
+}
+
+/* Solution4: Two Pointers
+ * We use left_max and right_max to store the left and right max height of each position.
+ * The time complexity is O(n), the space complexity is O(1).
+ */
+int trap4(int* height, int heightSize) {
+    int left = 0, right = heightSize - 1, left_max = 0, right_max = 0, volume = 0;
+
+    if (heightSize < 3) {
+        return 0;
+    }
+
+    while (left < right) {
+        if (height[left] < height[right]) {
+            left_max = (height[left] > left_max) ? height[left] : left_max;
+            volume += left_max - height[left];
+            left++;
+        } else {
+            right_max = (height[right] > right_max) ? height[right] : right_max;
+            volume += right_max - height[right];
+            right--;
+        }
+    }
+
+    return volume;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/longest-substring-without-repeating-characters/description/ */
+int lengthOfLongestSubstring(char* s) {
+    int longest_substring_len = 0, str_len = strlen(s);
+    int left = 0, right = 0;
+    int hash[128] = {0};
+    char cur_char;
+
+    while (right < str_len) {
+        cur_char = s[right];
+        if (hash[cur_char] != 0) {
+            longest_substring_len = (right - left) > longest_substring_len ? (right - left) : longest_substring_len;
+            hash[s[left]]--;
+            left++;
+        } else {
+            hash[cur_char]++;
+            right++;
+        }
+    }
+
+    longest_substring_len = (right - left) > longest_substring_len ? (right - left) : longest_substring_len;
+    return longest_substring_len;
 }
