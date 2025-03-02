@@ -1,38 +1,5 @@
 #include "stdlib.h"
-#include "myhash.h"
 #include "alg_sort.h"
-
-/* Solution for leetcode problem: https://leetcode.cn/problems/longest-consecutive-sequence/description/ */
-hash_table_stru *hash_table = NULL;
-
-int longestConsecutive(int* nums, int numsSize) {
-    int longest_consecutive = 0;
-    int cur_num, cur_len;
-
-    for (size_t i = 0; i < numsSize; i++) {
-        hash_add_item(&hash_table, nums[i]);
-    }
-
-    qsort(nums, numsSize, sizeof(int), int_compare_small_first);
-    for (size_t i = 0; i < numsSize; i++) {
-        if (hash_find_item(hash_table, nums[i] - 1)) {
-            continue;
-        }
-
-        cur_len = 1;
-        cur_num = nums[i] + 1;
-        while(hash_find_item(hash_table, cur_num)) {
-            cur_len++;
-            cur_num++;
-        }
-
-        if (cur_len > longest_consecutive) {
-            longest_consecutive = cur_len;
-        }
-    }
-
-    return longest_consecutive;
-}
 
 /* Solution for leetcode problem: https://leetcode.cn/problems/container-with-most-water/description/ */
 int maxArea(int* height, int heightSize) {
@@ -274,27 +241,4 @@ int trap4(int* height, int heightSize) {
     }
 
     return volume;
-}
-
-/* Solution for leetcode problem: https://leetcode.cn/problems/longest-substring-without-repeating-characters/description/ */
-int lengthOfLongestSubstring(char* s) {
-    int longest_substring_len = 0, str_len = strlen(s);
-    int left = 0, right = 0;
-    int hash[128] = {0};
-    char cur_char;
-
-    while (right < str_len) {
-        cur_char = s[right];
-        if (hash[cur_char] != 0) {
-            longest_substring_len = (right - left) > longest_substring_len ? (right - left) : longest_substring_len;
-            hash[s[left]]--;
-            left++;
-        } else {
-            hash[cur_char]++;
-            right++;
-        }
-    }
-
-    longest_substring_len = (right - left) > longest_substring_len ? (right - left) : longest_substring_len;
-    return longest_substring_len;
 }

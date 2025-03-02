@@ -14,6 +14,7 @@ include_directories(
 #指定源文件，仅有此处包含的文件会参与编译
 file(GLOB SRC_FILES
 "${PROJECT_SOURCE_DIR}/src/*.c"
+"${PROJECT_SOURCE_DIR}/leetcode/*.c"
 "${PROJECT_SOURCE_DIR}/main.c")
 
 #添加宏定义
