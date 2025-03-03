@@ -118,3 +118,46 @@ struct ListNode *detectCycle(struct ListNode *head) {
 
     return slow;
 }
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/intersection-of-two-linked-lists/description/
+ * Lets say the length of listA, listB, non-intersected part of listA, non-intersected part of listB and intersected part are m, n, a, b, and c respectively.
+   If the two lists is intersected, p1 will reach the end of listA after m steps, and p2 will reach the end of listB after n steps.
+   When p1 reaches the end of listA, it will start to move on listB. After b steps on listB, p1 will meet p2, which moves b steps on listA after reaching the end of listB.
+   The number of steps p1 moves is m + b = a + c + b = b + c + a = n + a, which is the number of steps p2 moves.
+   And if the two lists are not intersected, the number of steps p1 moves will be m + n, which is the same as the number of steps p2 moves.
+ */
+struct ListNode *getIntersectionNode(struct ListNode *headA, struct ListNode *headB) {
+    struct ListNode *p1 = headA, *p2 = headB;
+
+    if (p1 == NULL || p2 == NULL) {
+        return NULL;
+    }
+
+    while (p1 != p2) {
+        p1 = (p1 == NULL) ? headB : p1->next;
+        p2 = (p2 == NULL) ? headA : p2->next;
+    }
+
+    return p1;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/remove-duplicates-from-sorted-list/description/ */
+struct ListNode* deleteDuplicates(struct ListNode* head) {
+    struct ListNode *p = head, *q = NULL;
+
+    while (p != NULL) {
+        while (p->next != NULL && p->val == p->next->val) {
+            p = p->next;
+        }
+        if (q == NULL) {
+            q = p;
+            head = q;
+        } else {
+            q->next = p;
+            q = p;
+        }
+        p = p->next;
+    }
+
+    return head;
+}

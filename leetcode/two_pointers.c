@@ -242,3 +242,89 @@ int trap4(int* height, int heightSize) {
 
     return volume;
 }
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/remove-duplicates-from-sorted-array/description/ */
+int removeDuplicates(int* nums, int numsSize) {
+    int i = 0, j = 0;
+
+    while (i < numsSize) {
+        while (i < numsSize - 1 && nums[i] == nums[i + 1]) {
+            i++;
+        }
+
+        nums[j++] = nums[i++];
+    }
+
+    return j;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/remove-element/description/ */
+int removeElement(int* nums, int numsSize, int val) {
+    int i = 0, j = 0;
+
+    while (i < numsSize) {
+        if (nums[i] != val) {
+            nums[j++] = nums[i];
+        }
+        i++;
+    }
+
+    return j;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/move-zeroes/description/ */
+void moveZeroes(int* nums, int numsSize) {
+    int non_zero_pos = 0;
+
+    for (int i = 0; i < numsSize; ++i) {
+        if (nums[i] != 0) {
+            nums[non_zero_pos] = nums[i];
+            non_zero_pos++;
+        }
+    }
+
+    while (non_zero_pos < numsSize)
+        nums[non_zero_pos++] = 0;
+
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/two-sum-ii-input-array-is-sorted/description/ */
+int* twoSum(int* numbers, int numbersSize, int target, int* returnSize) {
+    int *ret_array = NULL;
+    int left = 0, right = numbersSize - 1;
+
+    ret_array = (int*)malloc(sizeof(int) * 2);
+    if (ret_array == NULL) {
+        printf("twoSum: malloc failed\n");
+        return NULL;
+    }
+
+    *returnSize = 2;
+    while (left < right) {
+        if (numbers[left] + numbers[right] == target) {
+            ret_array[0] = left + 1;
+            ret_array[1] = right + 1;
+            return ret_array;
+        } else if (numbers[left] + numbers[right] < target) {
+            left++;
+        } else {
+            right--;
+        }
+    }
+
+    return NULL;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/reverse-string/description/ */
+void reverseString(char* s, int sSize) {
+    int left = 0, right = sSize - 1;
+    char tmp;
+
+    while (left < right) {
+        tmp = s[left];
+        s[left] = s[right];
+        s[right] = tmp;
+        left++;
+        right--;
+    }
+}
