@@ -8,4 +8,7 @@ typedef struct TreeNode {
 } TreeNode;
 
 struct TreeNode* deduceTree(int* preorder, int preorderSize, int* inorder, int inorderSize);
+int maxDepth(struct TreeNode* root);
+int* inorderTraversal(struct TreeNode* root, int* returnSize);
+
 #endif

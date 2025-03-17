@@ -10,5 +10,6 @@ void freeLinkedList(struct ListNode *list);
 struct ListNode* constructLinkedList(int *data, int size);
 struct ListNode* mergeTwoLists(struct ListNode* list1, struct ListNode* list2);
 struct ListNode* findNthFromEnd(struct ListNode* head, int n);
+struct ListNode* reverseList(struct ListNode* head);
 
 #endif

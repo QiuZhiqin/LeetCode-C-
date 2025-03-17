@@ -94,3 +94,69 @@ struct ListNode* findNthFromEnd(struct ListNode* head, int n)
 
     return p2;
 }
+
+struct ListNode* reverseList(struct ListNode* head) {
+    struct ListNode* pre = NULL, *cur = head, *next = NULL;
+    if (head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    while (cur != NULL) {
+        next = cur->next;
+        cur->next = pre;
+        pre = cur;
+        cur = next;
+    }
+
+    return pre;
+}
+
+struct ListNode* sortList(struct ListNode* head) {
+    struct ListNode *p = head, *q = NULL, dummyHead = {0}, *prev = NULL, *cur = NULL;
+    int len = 0, subLen = 1;
+
+    if (head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    while (p != NULL) {
+        len++;
+        p = p->next;
+    }
+
+    dummyHead.next = head;
+    while (subLen < len) {
+        cur = dummyHead.next;
+        prev = &dummyHead;
+        while (cur != NULL) {
+            struct ListNode *next = NULL;
+            p = cur;
+            for (int i = 1; i < subLen && cur != NULL && cur->next != NULL; i++) {
+                cur = cur->next;
+            }
+            if (cur == NULL) {
+                break;
+            }
+            q = cur->next;
+            cur->next = NULL;
+            cur = q;
+            for (int i = 1; i < subLen && cur != NULL && cur->next != NULL; i++) {
+                cur = cur->next;
+            }
+
+            if (cur != NULL) {
+                next = cur->next;
+                cur->next = NULL;
+            }
+
+            prev->next = mergeTwoLists(p, q);
+            while (prev->next != NULL) {
+                prev = prev->next;
+            }
+            cur = next;
+        }
+        subLen <<= 1;
+    }
+
+    return dummyHead.next;
+}

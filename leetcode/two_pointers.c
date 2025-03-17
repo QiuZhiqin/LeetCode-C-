@@ -328,3 +328,84 @@ void reverseString(char* s, int sSize) {
         right--;
     }
 }
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/longest-palindromic-substring/description/ */
+int palindrome(char *s, int left, int right, char *subStr)
+{
+    while (left >= 0 && right < strlen(s) && s[left] == s[right]) {
+        left--;
+        right++;
+    }
+
+    strncpy(subStr, s + left + 1, right - left - 1);
+    subStr[right - left - 1] = '\0';
+    return right - left - 1;
+}
+
+char* longestPalindrome(char* s) {
+    char str1[1001] = {0}, str2[1001] = {0}, *ret;
+    int len = strlen(s), max_len = 0;
+    int len1, len2, start1 = 0, start2 = 0;
+
+    ret = (char *)malloc(sizeof(char) * 1000);
+    if (ret == NULL) {
+        printf("longestPalindrome: malloc failed\n");
+        return NULL;
+    }
+    memset(ret, 0, sizeof(char) * 1001);
+
+    for (int i = 0; i < len; i++) {
+        len1 = palindrome(s, i, i, str1);
+        len2 = palindrome(s, i, i + 1, str2);
+        int cur_len = len1 > len2 ? len1 : len2;
+        if (cur_len > max_len) {
+            max_len = cur_len;
+            strcpy(ret, len1 > len2 ? str1 : str2);
+        }
+    }
+
+    return ret;
+}
+
+int* searchRange(int* nums, int numsSize, int target, int* returnSize) {
+    int *ret_array = NULL;
+    int left = 0, right = numsSize - 1, mid;
+
+    ret_array = (int*)malloc(sizeof(int) * 2);
+    if (ret_array == NULL) {
+        printf("searchRange: malloc failed\n");
+        return NULL;
+    }
+    memset(ret_array, -1, sizeof(int) * 2);
+    *returnSize = 2;
+
+    while (left <= right) {
+        mid = left + ((right - left) >> 1);
+        if (nums[mid] >= target) {
+            right = mid - 1;
+        } else if (nums[mid] < target) {
+            left = mid + 1;
+        }
+    }
+
+    if (left < numsSize && nums[left] == target) {
+        ret_array[0] = left;
+    }
+
+    left = 0;
+    right = numsSize - 1;
+    while (left <= right) {
+        mid = left + ((right - left) >> 1);
+        if (nums[mid] > target) {
+            right = mid - 1;
+        } else if (nums[mid] <= target) {
+            left = mid + 1;
+        }
+    }
+
+    if (right >= 0 && nums[right] == target) {
+        ret_array[1] = right;
+    }
+
+    return ret_array;
+}

@@ -161,3 +161,148 @@ struct ListNode* deleteDuplicates(struct ListNode* head) {
 
     return head;
 }
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/palindrome-linked-list/description/ */
+bool isPalindrome(struct ListNode* head) {
+    struct ListNode *slow = head, *fast = head;
+
+    while (fast != NULL && fast->next != NULL) {
+        fast = fast->next->next;
+        slow = slow->next;
+    }
+
+    fast = head;
+    slow = reverseList(slow);
+    while (slow != NULL) {
+        if (slow->val != fast->val) {
+            return false;
+        }
+        slow = slow->next;
+        fast = fast->next;
+    }
+
+    return true;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/add-two-numbers/description/ */
+struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
+    struct ListNode *p1 = NULL, *p2 = NULL, *q = NULL, header = {0};
+    int carry = 0, sum = 0;
+
+    header.next = l1;    // We choice l1 as the result list.
+    p1 = l1;
+    p2 = l2;
+    q = &header;
+    while (p1!= NULL && p2 != NULL) {
+        sum = p1->val + p2->val + carry;
+        carry = sum / 10;
+        q->next->val = sum % 10;
+        p1 = p1->next;
+        p2 = p2->next;
+        q = q->next;
+        if (p1 == NULL) {
+            q->next = p2;
+        }
+    }
+
+    if (p1 == NULL) {
+        while (p2 != NULL && carry != 0) {
+            sum = p2->val + carry;
+            carry = sum / 10;
+            q->next->val = sum % 10;
+            p2 = p2->next;
+            q = q->next;
+        }
+    } else {
+        while (p1 != NULL && carry != 0) {
+            sum = p1->val + carry;
+            carry = sum / 10;
+            q->next->val = sum % 10;
+            p1 = p1->next;
+            q = q->next;
+        }
+    }
+
+    if (carry != 0) {
+        q->next = (struct ListNode*)malloc(sizeof(struct ListNode));
+        q->next->val = carry;
+        q->next->next = NULL;
+    }
+
+    return l1;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/sort-list/description/ */
+struct ListNode* sortList(struct ListNode* head) {
+    struct ListNode *p = head, *q = NULL, dummyHead = {0}, *prev = NULL, *cur = NULL, *next = NULL;
+    int len = 0, subLen = 1;
+
+    if (head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    while (p != NULL) {
+        len++;
+        p = p->next;
+    }
+
+    dummyHead.next = head;
+    /* Merge two list with length of subLen each time, after reaverse the whole list, double subLen.
+     * Repeat the above process until subLen is greater than or equal to len.
+     */
+    while (subLen < len) {
+        cur = dummyHead.next;
+        prev = &dummyHead;    // prev is the tail of the list that already merged.
+        while (cur != NULL) {
+            p = cur;    // p is the head of the first list.
+            for (int i = 1; i < subLen && cur->next != NULL; i++) {    // Find the tail of the first list.
+                cur = cur->next;
+            }
+
+            q = cur->next;    // q is the head of the second list.
+            cur->next = NULL;    // Cut the first list out.
+            cur = q;    // Move cur to the head of the second list.
+            /* Find the tail of the second list */
+            for (int i = 1; i < subLen && cur != NULL && cur->next != NULL; i++) {
+                cur = cur->next;
+            }
+
+            next = NULL;
+            if (cur != NULL) {
+                next = cur->next;    // next is the head of the list that is waiting to merge in next loop.
+                cur->next = NULL;
+            }
+
+            prev->next = mergeTwoLists(p, q);
+            while (prev->next != NULL) {
+                prev = prev->next;
+            }
+            cur = next;
+        }
+        subLen <<= 1;    // Double the subLen.
+    }
+
+    return dummyHead.next;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/swap-nodes-in-pairs/description/ */
+struct ListNode* swapPairs(struct ListNode* head) {
+    struct ListNode *p = head, *q = NULL, *prev = NULL, dummyHead = {0};
+
+    if (head == NULL || head->next == NULL) {
+        return head;
+    }
+
+    dummyHead.next = head;
+    prev = &dummyHead;
+    while (p != NULL && p->next != NULL) {
+        q = p->next;
+        p->next = q->next;
+        q->next = p;
+        prev->next = q;
+        prev = p;
+        p = p->next;
+    }
+
+    return dummyHead.next;
+}
