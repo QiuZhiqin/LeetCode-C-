@@ -232,59 +232,6 @@ struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2) {
     return l1;
 }
 
-/* Solution for leetcode problem: https://leetcode.cn/problems/sort-list/description/ */
-struct ListNode* sortList(struct ListNode* head) {
-    struct ListNode *p = head, *q = NULL, dummyHead = {0}, *prev = NULL, *cur = NULL, *next = NULL;
-    int len = 0, subLen = 1;
-
-    if (head == NULL || head->next == NULL) {
-        return head;
-    }
-
-    while (p != NULL) {
-        len++;
-        p = p->next;
-    }
-
-    dummyHead.next = head;
-    /* Merge two list with length of subLen each time, after reaverse the whole list, double subLen.
-     * Repeat the above process until subLen is greater than or equal to len.
-     */
-    while (subLen < len) {
-        cur = dummyHead.next;
-        prev = &dummyHead;    // prev is the tail of the list that already merged.
-        while (cur != NULL) {
-            p = cur;    // p is the head of the first list.
-            for (int i = 1; i < subLen && cur->next != NULL; i++) {    // Find the tail of the first list.
-                cur = cur->next;
-            }
-
-            q = cur->next;    // q is the head of the second list.
-            cur->next = NULL;    // Cut the first list out.
-            cur = q;    // Move cur to the head of the second list.
-            /* Find the tail of the second list */
-            for (int i = 1; i < subLen && cur != NULL && cur->next != NULL; i++) {
-                cur = cur->next;
-            }
-
-            next = NULL;
-            if (cur != NULL) {
-                next = cur->next;    // next is the head of the list that is waiting to merge in next loop.
-                cur->next = NULL;
-            }
-
-            prev->next = mergeTwoLists(p, q);
-            while (prev->next != NULL) {
-                prev = prev->next;
-            }
-            cur = next;
-        }
-        subLen <<= 1;    // Double the subLen.
-    }
-
-    return dummyHead.next;
-}
-
 /* Solution for leetcode problem: https://leetcode.cn/problems/swap-nodes-in-pairs/description/ */
 struct ListNode* swapPairs(struct ListNode* head) {
     struct ListNode *p = head, *q = NULL, *prev = NULL, dummyHead = {0};
@@ -302,6 +249,38 @@ struct ListNode* swapPairs(struct ListNode* head) {
         prev->next = q;
         prev = p;
         p = p->next;
+    }
+
+    return dummyHead.next;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/reverse-nodes-in-k-group/ */
+/* The time complexity is O(n), space complexity id O(1). */
+struct ListNode* reverseKGroup(struct ListNode* head, int k) {
+    struct ListNode *p = head, *q = NULL, *prev = NULL, dummyHead = {0};
+
+    if (head == NULL || head->next == NULL || k == 1) {
+        return head;
+    }
+
+    dummyHead.next = head;
+    prev = &dummyHead;    // The last node of the reversed list. prev->next is the head node of the non-reversed list.
+    while (p != NULL) {
+        q = p;
+        for (int i = 0; i < k - 1 && q != NULL; ++i){
+            q = q->next;
+        }
+        if (q == NULL) {    // The rest of the list is less than k nodes.
+            break;
+        }
+
+        p = q->next;    // The next group's head node.
+        q->next = NULL;    // Cut the list into two parts.
+        prev->next = reverseList(prev->next);    // Reverse the list and link it to the reversed list.
+        while (prev->next != NULL) {
+            prev = prev->next;
+        }
+        prev->next = p;    // Link the rest of the list to the reversed list, make sure the list is not broken.
     }
 
     return dummyHead.next;

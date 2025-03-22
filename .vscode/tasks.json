@@ -93,6 +93,11 @@
 			"command": "mv build/Debug/*.exe ./",
 		},
 		{
+			"type": "shell",
+			"label": "Del build",
+			"command": "rm  -rf build",
+		},
+		{
 			"label": "Build",
 			"dependsOrder": "sequence",
 			"dependsOn":[

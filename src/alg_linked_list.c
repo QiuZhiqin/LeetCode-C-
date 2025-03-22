@@ -112,7 +112,7 @@ struct ListNode* reverseList(struct ListNode* head) {
 }
 
 struct ListNode* sortList(struct ListNode* head) {
-    struct ListNode *p = head, *q = NULL, dummyHead = {0}, *prev = NULL, *cur = NULL;
+    struct ListNode *p = head, *q = NULL, dummyHead = {0}, *prev = NULL, *cur = NULL, *next = NULL;
     int len = 0, subLen = 1;
 
     if (head == NULL || head->next == NULL) {
@@ -125,27 +125,29 @@ struct ListNode* sortList(struct ListNode* head) {
     }
 
     dummyHead.next = head;
+    /* Merge two list with length of subLen each time, after reaverse the whole list, double subLen.
+     * Repeat the above process until subLen is greater than or equal to len.
+     */
     while (subLen < len) {
         cur = dummyHead.next;
-        prev = &dummyHead;
+        prev = &dummyHead;    // prev is the tail of the list that already merged.
         while (cur != NULL) {
-            struct ListNode *next = NULL;
-            p = cur;
-            for (int i = 1; i < subLen && cur != NULL && cur->next != NULL; i++) {
+            p = cur;    // p is the head of the first list.
+            for (int i = 1; i < subLen && cur->next != NULL; i++) {    // Find the tail of the first list.
                 cur = cur->next;
             }
-            if (cur == NULL) {
-                break;
-            }
-            q = cur->next;
-            cur->next = NULL;
-            cur = q;
+
+            q = cur->next;    // q is the head of the second list.
+            cur->next = NULL;    // Cut the first list out.
+            cur = q;    // Move cur to the head of the second list.
+            /* Find the tail of the second list */
             for (int i = 1; i < subLen && cur != NULL && cur->next != NULL; i++) {
                 cur = cur->next;
             }
 
+            next = NULL;
             if (cur != NULL) {
-                next = cur->next;
+                next = cur->next;    // next is the head of the list that is waiting to merge in next loop.
                 cur->next = NULL;
             }
 
@@ -155,7 +157,7 @@ struct ListNode* sortList(struct ListNode* head) {
             }
             cur = next;
         }
-        subLen <<= 1;
+        subLen <<= 1;    // Double the subLen.
     }
 
     return dummyHead.next;

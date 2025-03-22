@@ -61,6 +61,10 @@
     "cstdlib": "c",
     "alg_sort.h": "c",
     "stdio.h": "c",
-    "myhash.h": "c"
+    "myhash.h": "c",
+    "string.h": "c",
+    "alg_linked_list.h": "c",
+    "stdlib.h": "c",
+    "alg_binary_tree.h": "c"
   }
 }
