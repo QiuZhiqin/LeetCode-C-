@@ -1,6 +1,11 @@
 #ifndef __COMMON_H
 #define __COMMON_H
 
+#include "stdlib.h"
+#include "stdbool.h"
+
+#define MAX(a, b) ((b) > (a) ? (b) : (a))
+
 static inline void swap(int *a, int *b)
 {
     int tmp = *a;

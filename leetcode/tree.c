@@ -91,3 +91,111 @@ int* rightSideView(struct TreeNode* root, int* returnSize) {
     *returnSize = maxDepth(root);
     return retArray;
 }
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/flatten-binary-tree-to-linked-list/description/ */
+void flatten(struct TreeNode* root) {
+    struct TreeNode *p, *left, *right;
+
+    if (root == NULL) {
+        return;
+    }
+
+    left = root->left;
+    right = root->right;
+    flatten(left);
+    flatten(right);
+    root->left = NULL;
+    root->right = left;
+    p = root;
+    while (p->right != NULL) {
+        p = p->right;
+    }
+    p->right = right;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/path-sum-iii/description/ */
+int countPathsFromNode(struct TreeNode* node, int currentSum, int targetSum) {
+    int ret;
+
+    if (node == NULL) {
+        return 0;
+    }
+
+    currentSum += node->val;
+    ret = (currentSum == targetSum) ? 1 : 0;
+    ret += countPathsFromNode(node->left, currentSum, targetSum);
+    ret += countPathsFromNode(node->right, currentSum, targetSum);
+
+    return ret;
+}
+
+int pathSum(struct TreeNode* root, int targetSum) {
+    if (root == NULL) {
+        return 0;
+    }
+
+    return countPathsFromNode(root, 0, targetSum) + pathSum(root->left, targetSum) + pathSum(root->right, targetSum);
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/description/ */
+struct TreeNode* dfsFindTarget(struct TreeNode* root, struct TreeNode* p, struct TreeNode* q)
+{
+    struct TreeNode* left = NULL, *right = NULL;
+
+    if (root == NULL) {
+        return NULL;
+    }
+
+    if (root == p || root == q) {
+        return root;
+    }
+
+    left = dfsFindTarget(root->left, p, q);
+    right = dfsFindTarget(root->right, p, q);
+    if (left == NULL) {    // p and q are in the right subtree.
+        return right;
+    } else if (right == NULL) {    // p and q are in the left subtree.
+        return left;
+    } else {    // p and q are in the different subtrees.
+        return root;
+    }
+}
+
+struct TreeNode* lowestCommonAncestor(struct TreeNode* root, struct TreeNode* p, struct TreeNode* q) {
+    return dfsFindTarget(root, p, q);
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/binary-tree-maximum-path-sum/description/ */
+int maxPathSumHelper(struct TreeNode* root, int *max)
+{
+    int left = 0, right = 0, sum = 0;
+
+    if (root == NULL) {
+        return 0;
+    }
+
+    left = maxPathSumHelper(root->left, max);
+    right = maxPathSumHelper(root->right, max);
+    /* Try to connect the left and right max path to the root node, see if the sum is bigger than the current max path sum. */
+    sum = root->val + left + right;
+    if (sum > *max) {
+        *max = sum;
+    }
+
+    /* This function returns the maximum path sum that starts from the root node and ends at any node in the subtree rooted at root. 
+     * Notice that you cant return MAX(sum, 0) because one node can only has one path.
+     * MAX(left, right) + root->val means connect root to the bigger path.
+     */
+    return MAX(root->val + MAX(left, right), 0);
+}
+
+int maxPathSum(struct TreeNode* root) {
+    int max = INT_MIN;
+
+    if (root == NULL) {
+        return 0;
+    }
+
+    maxPathSumHelper(root, &max);
+    return max;
+}

@@ -10,7 +10,7 @@ typedef struct TreeNode {
     struct TreeNode *right;
 } TreeNode;
 
-struct TreeNode* deduceTree(int* preorder, int preorderSize, int* inorder, int inorderSize);
+struct TreeNode* buildTree(int* preorder, int preorderSize, int* inorder, int inorderSize);
 int maxDepth(struct TreeNode* root);
 int* inorderTraversal(struct TreeNode* root, int* returnSize);
 struct TreeNode* sortedArrayToBST(int* nums, int numsSize);
