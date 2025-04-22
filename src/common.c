@@ -1,12 +1,12 @@
-#include"common.h"
+#include "common.h"
 
-/* 获取数组最大位权 */
+/* Get the maximum weight of the array */
 unsigned int get_maxbits(unsigned int *data, unsigned int arry_size)
 {
     unsigned int max = 0;
     unsigned int digit = 0;
 
-    for (int i = 0; i < arry_size; ++i) {
+    for (unsigned int i = 0; i < arry_size; ++i) {
         if (data[i] > max) {
             max = data[i];
         }
@@ -22,7 +22,7 @@ unsigned int get_maxbits(unsigned int *data, unsigned int arry_size)
 
 unsigned int get_digit(unsigned int num, unsigned int position)
 {
-    for (int i = 0; i < position; ++i) {
+    for (unsigned int i = 0; i < position; ++i) {
         num /= 10;
     }
 

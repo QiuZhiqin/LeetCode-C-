@@ -1,4 +1,4 @@
-#include "stdlib.h"
+#include "common.h"
 #include "alg_sort.h"
 
 /* Solution for leetcode problem: https://leetcode.cn/problems/container-with-most-water/description/ */
@@ -352,7 +352,7 @@ char* longestPalindrome(char* s) {
         printf("longestPalindrome: malloc failed\n");
         return NULL;
     }
-    memset(ret, 0, sizeof(char) * 1001);
+    memset(ret, 0, sizeof(char) * 1000);
 
     for (int i = 0; i < len; i++) {
         len1 = palindrome(s, i, i, str1);

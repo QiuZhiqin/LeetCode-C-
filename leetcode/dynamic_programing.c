@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <stdbool.h>
+#include "common.h"
 
 /* Solution for leetcode problem: https://leetcode-cn.com/problems/coin-change/description/ */
 int coinChange(int* coins, int coinsSize, int amount) {
@@ -213,4 +212,55 @@ bool canPartitionVersion2(int* nums, int numsSize) {
     }
 
     return dp[target];
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/longest-valid-parentheses/description/*/
+int longestValidParentheses(char* s) {
+    int dp[30000] = {0}, max = 0, len = 0;
+
+    if (s == NULL || strlen(s) == 0) {
+        return 0;
+    }
+
+    len = strlen(s);
+    /* dp[i] means the length of the longest valid parentheses that ends with s[i]. */
+    for (int i = 1; i < len; ++i) {
+        if (s[i] == ')') {
+            if (s[i - 1] == '(') {
+                dp[i] = (i - 2 >= 0 ? dp[i - 2] : 0) + 2;
+            } else if (s[i - 1] == ')') {
+                /* i - dp[i - 1] - 1 means the index of the last '(' that can be matched with s[i]. */
+                if (i - dp[i - 1] - 1 >= 0 && s[i - dp[i - 1] - 1] == '(') {
+                    /* If s[i - dp[i - 1] - 1] == '(', we can add the length of the longest valid parentheses that ends with s[i - dp[i - 1] - 2]. */
+                    dp[i] = dp[i - 1] + (i - dp[i - 1] - 2 >= 0 ? dp[i - dp[i - 1] - 2] : 0) + 2;
+                }
+            }
+        }
+        max = max > dp[i] ? max : dp[i];
+    }
+
+    return max;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/word-break/description/ */
+bool wordBreak(char* s, char** wordDict, int wordDictSize) {
+    int len = strlen(s), i, j;
+    bool *dp = NULL;
+
+    dp = (bool*)malloc((len + 1) * sizeof(bool));
+    if (dp == NULL) {
+        return false;
+    }
+    memset(dp, 0, (len + 1) * sizeof(bool));
+    dp[0] = true;
+    for (i = 1; i < len + 1; ++i) {
+        for (j = 0; j < wordDictSize; ++j) {
+            int wordLen = strlen(wordDict[j]);
+            if (i >= wordLen && strncmp(s + i - wordLen, wordDict[j], wordLen) == 0) {
+                dp[i] = dp[i] || dp[i - wordLen];
+            }
+        }
+    }
+
+    return dp[len];
 }

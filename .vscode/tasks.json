@@ -51,7 +51,11 @@
 			"command": "cmake",
 			"args": [
 				"-S", "${workspaceFolder}",         // 源码目录
-				"-B", "${workspaceFolder}/build"    // 编译目录
+				"-B", "${workspaceFolder}/build",    // 编译目录
+				"-G", "MinGW Makefiles",  // 指定使用 MinGW（g++）
+				"-DCMAKE_CXX_COMPILER=g++",  // 强制使用 g++
+				"-DCMAKE_C_COMPILER=gcc",    // 强制使用 gcc
+				"-DCMAKE_MAKE_PROGRAM=mingw32-make"  // 指定 make 工具（仅 Windows 需要）
 			],
 			"options": {
 				"cwd": "${workspaceFolder}"         // 工作目录
@@ -70,7 +74,7 @@
 			"command": "cmake",
 			"args": [
 				"--build",
-				"Build",
+				"build",
 				"--config Debug"
 			],
 			"options": {
@@ -90,19 +94,22 @@
 		{
 			"type": "shell",
 			"label": "Copy Excutable",
-			"command": "mv build/Debug/*.exe ./",
+			"command": "mv build/*.exe ./",
 		},
 		{
 			"type": "shell",
 			"label": "Del build",
 			"command": "rm  -rf build",
+			"dependsOn":[
+				"Copy Excutable"
+			]
 		},
 		{
 			"label": "Build",
 			"dependsOrder": "sequence",
 			"dependsOn":[
 				"CMake Build",
-				"Copy Excutable"
+				"Del build",
 			]
 		}
 	]

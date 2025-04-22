@@ -1,5 +1,4 @@
-#include "stdlib.h"
-#include "stdbool.h"
+#include "common.h"
 
 /* Solution for leetcode problem: https://leetcode.cn/problems/longest-substring-without-repeating-characters/description/ */
 int lengthOfLongestSubstring(char* s) {

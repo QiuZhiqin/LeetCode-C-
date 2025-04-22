@@ -1,8 +1,14 @@
-#ifndef __COMMON_H
-#define __COMMON_H
+#ifndef COMMON_H_
+#define COMMON_H_
 
-#include "stdlib.h"
-#include "stdbool.h"
+#include <stdlib.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define MAX(a, b) ((b) > (a) ? (b) : (a))
 
@@ -18,4 +24,7 @@ unsigned int get_maxbits(unsigned int *data, unsigned int arry_size);
 
 unsigned int get_digit(unsigned int num, unsigned int position);
 
+#ifdef __cplusplus
+}
+#endif
 #endif

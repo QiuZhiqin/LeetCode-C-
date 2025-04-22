@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <stdbool.h>
+#include "common.h"
 #include "alg_linked_list.h"
 
 /* Solution for leetcode problem: https://leetcode.cn/problems/partition-list/description/ */
@@ -122,7 +121,7 @@ struct ListNode *detectCycle(struct ListNode *head) {
 /* Solution for leetcode problem: https://leetcode.cn/problems/intersection-of-two-linked-lists/description/
  * Lets say the length of listA, listB, non-intersected part of listA, non-intersected part of listB and intersected part are m, n, a, b, and c respectively.
    If the two lists is intersected, p1 will reach the end of listA after m steps, and p2 will reach the end of listB after n steps.
-   When p1 reaches the end of listA, it will start to move on listB. After b steps on listB, p1 will meet p2, which moves b steps on listA after reaching the end of listB.
+   When p1 reaches the end of listA, it will start to move on listB. After b steps on listB, p1 will meet p2, which moves a steps on listA after reaching the end of listB.
    The number of steps p1 moves is m + b = a + c + b = b + c + a = n + a, which is the number of steps p2 moves.
    And if the two lists are not intersected, the number of steps p1 moves will be m + n, which is the same as the number of steps p2 moves.
  */

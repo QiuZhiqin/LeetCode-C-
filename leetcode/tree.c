@@ -1,4 +1,5 @@
 #include "alg_binary_tree.h"
+#include "common.h"
 
 /* Solution for leetcode problem: https://leetcode.cn/problems/diameter-of-binary-tree/description/ */
 int diameterOfBinaryTreeHelp(struct TreeNode* root, int *max)
@@ -198,4 +199,21 @@ int maxPathSum(struct TreeNode* root) {
 
     maxPathSumHelper(root, &max);
     return max;
+}
+
+/* Solution for leetcode problem: https://leetcode.cn/problems/balanced-binary-tree/description/ */
+bool isBalanced(struct TreeNode* root) {
+    int left = 0, right = 0;
+
+    if (root == NULL) {
+        return true;
+    }
+
+    left = maxDepth(root->left);
+    right = maxDepth(root->right);
+    if (abs(left - right) > 1) {
+        return false;
+    }
+
+    return isBalanced(root->left) && isBalanced(root->right);
 }

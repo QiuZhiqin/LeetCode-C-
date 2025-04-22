@@ -1,7 +1,5 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<stdbool.h>
-#include"alg_binary_tree.h"
+#include "common.h"
+#include "alg_binary_tree.h"
 
 struct TreeNode* buildTree(int* preorder, int preorderSize, int* inorder, int inorderSize)
 {
